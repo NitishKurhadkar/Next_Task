@@ -23,7 +23,7 @@ export default function SignIn() {
   useEffect(() => {
     const cacheData = localStorage.getItem("data");
     if (!cacheData) localStorage.setItem("data", JSON.stringify(data.data));
-    setFormData(cacheData ? JSON.parse(cacheData) : data);
+    setFormData(cacheData ? JSON.parse(cacheData) : data.data);
   }, [])
 
   const {
