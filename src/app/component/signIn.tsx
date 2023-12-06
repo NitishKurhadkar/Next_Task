@@ -18,7 +18,7 @@ import data from "./../../../public/data.json";
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const [formData, setFormData] = useState<any []>();
+  const [formData, setFormData] = useState<any []>([]);
 
   useEffect(() => {
     const cacheData = localStorage.getItem("data");
@@ -45,7 +45,7 @@ export default function SignIn() {
             alignItems: "center",
           }}
         >
-          {!formData ? <CircularProgress />
+          {!formData[0] ? <CircularProgress />
             :
             <Fragment>
               <Typography component="h1" variant="h5">
@@ -79,7 +79,7 @@ export default function SignIn() {
                         })}
                         error={!!errors[item.name]}
                       >
-                        {item.listOfValues1.map((_item: String, index: number) => (
+                        {item.listOfValues1?.map((_item: String, index: number) => (
                           <MenuItem key={index+1000} value={index + 1}>
                             {_item}
                           </MenuItem>
