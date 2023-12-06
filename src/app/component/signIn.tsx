@@ -58,7 +58,13 @@ export default function SignIn() {
                 sx={{ mt: 1 }}
               >
                 {formData?.map((item: any) => {
-                  const fieldName = item.name.toLowerCase()
+                  const errorMsg : any = errors[item.name]?.message;
+                  const fieldName = item.name.toLowerCase();
+                  const pattern: any = fieldName == "email" ? {
+                    value: /\S+@\S+\.\S+/,
+                    message: "Entered value does not match email format",
+                  } : null;
+
                   return (["LIST", "RADIO"].includes(item.fieldType) ?
                     <Fragment key={item.id}>
                       <InputLabel id="listlabel">{item.name}</InputLabel>
@@ -72,15 +78,14 @@ export default function SignIn() {
                           required: item.required ? `${item.name} is required` : false
                         })}
                         error={!!errors[item.name]}
-                        id='render-select'
                       >
-                        {item.listOfValues1.map((_item: String, index: Number) => (
-                          <MenuItem key={_item} value={index + 1}>
+                        {item.listOfValues1.map((_item: String, index: number) => (
+                          <MenuItem key={index+1000} value={index + 1}>
                             {_item}
                           </MenuItem>
                         ))}
                       </Select>
-                      {errors[item.name]?.message && <FormHelperText htmlFor='render-select' error>{errors[item.name].message}</FormHelperText>}
+                      {errorMsg && <FormHelperText>{errorMsg}</FormHelperText>}
                     </Fragment>
                     :
                     <TextField
@@ -97,13 +102,10 @@ export default function SignIn() {
                         required: item.required ? `${item.name} is required` : false,
                         minLength: item.minLength,
                         maxLength: item.maxLength,
-                        pattern: fieldName == "email" ? {
-                          value: /\S+@\S+\.\S+/,
-                          message: "Entered value does not match email format",
-                        } : false,
+                        pattern : pattern,
                       })}
                       error={!!errors[item.name]}
-                      helperText={errors[item.name]?.message ? errors[item.name].message : errors[item.name]?.type == "minLength" ? `Minimum ${item.minLength} character is required` : errors[item.name]?.type == "maxLength" ? `Maximum ${item.maxLength} character` : false}
+                      helperText={errorMsg ? errorMsg : errors[item.name]?.type == "minLength" ? `Minimum ${item.minLength} character is required` : errors[item.name]?.type == "maxLength" ? `Maximum ${item.maxLength} character` : false}
                     />
                   )
                 })
