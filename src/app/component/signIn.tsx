@@ -62,7 +62,7 @@ export default function SignIn() {
         >
           {
             <Fragment>
-              <Typography component="h1" variant="h5">
+              <Typography mt={2} component="h1" variant="h5">
                 Sign in
               </Typography>
               <Box
