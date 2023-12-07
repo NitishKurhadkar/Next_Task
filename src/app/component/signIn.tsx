@@ -18,7 +18,7 @@ import data from "./../../../public/data.json";
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const [formData, setFormData] = useState<any []>([]);
+  const [formData, setFormData] = useState<any[]>([]);
 
   useEffect(() => {
     const cacheData = localStorage.getItem("data");
@@ -34,19 +34,33 @@ export default function SignIn() {
   console.log(errors, "errors")
 
   const onSubmit = (inputData: Object) => console.log(inputData)
+
+  if (!formData[0]) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          width: "100%"
+        }}
+      ><CircularProgress color="warning" />
+      </Box>
+    )
+  };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        : <Box
+        <Box
           sx={{
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
           }}
         >
-          {!formData[0] ? <CircularProgress />
-            :
+          {
             <Fragment>
               <Typography component="h1" variant="h5">
                 Sign in
@@ -58,7 +72,7 @@ export default function SignIn() {
                 sx={{ mt: 1 }}
               >
                 {formData?.map((item: any) => {
-                  const errorMsg : any = errors[item.name]?.message;
+                  const errorMsg: any = errors[item.name]?.message;
                   const fieldName = item.name.toLowerCase();
                   const pattern: any = fieldName == "email" ? {
                     value: /\S+@\S+\.\S+/,
@@ -67,7 +81,7 @@ export default function SignIn() {
 
                   return (["LIST", "RADIO"].includes(item.fieldType) ?
                     <Fragment key={item.id}>
-                      <InputLabel id="listlabel">{item.name}</InputLabel>
+                      <InputLabel sx={{ mt: 1 }} id="listlabel">{item.name}</InputLabel>
                       <Select
                         key={item.id}
                         labelId="listlabel"
@@ -80,7 +94,7 @@ export default function SignIn() {
                         error={!!errors[item.name]}
                       >
                         {item.listOfValues1?.map((_item: String, index: number) => (
-                          <MenuItem key={index+1000} value={index + 1}>
+                          <MenuItem key={index + 1000} value={index + 1}>
                             {_item}
                           </MenuItem>
                         ))}
@@ -102,7 +116,7 @@ export default function SignIn() {
                         required: item.required ? `${item.name} is required` : false,
                         minLength: item.minLength,
                         maxLength: item.maxLength,
-                        pattern : pattern,
+                        pattern: pattern,
                       })}
                       error={!!errors[item.name]}
                       helperText={errorMsg ? errorMsg : errors[item.name]?.type == "minLength" ? `Minimum ${item.minLength} character is required` : errors[item.name]?.type == "maxLength" ? `Maximum ${item.maxLength} character` : false}
@@ -116,6 +130,7 @@ export default function SignIn() {
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
+                  className="signInBtn"
                 >
                   Sign In
                 </Button>
